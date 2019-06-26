@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <h1>3.5. Implementing a Stack in Python<a class="headerlink" href="#implementing-a-stack-in-python"
+            title="Permalink to this headline">¶</a></h1>
+    <p>Now that we have clearly defined the stack as an abstract data type we
+        will turn our attention to using Python to implement the stack. Recall
+        that when we give an abstract data type a physical implementation we
+        refer to the implementation as a data structure.</p>
+    <p>As we described in Chapter 1, in Python, as in any object-oriented
+        programming language, the implementation of choice for an abstract data
+        type such as a stack is the creation of a new class. The stack
+        operations are implemented as methods. Further, to implement a stack,
+        which is a collection of elements, it makes sense to utilize the power
+        and simplicity of the primitive collections provided by Python. We will
+        use a list.</p>
+    <p>Recall that the list class in Python provides an ordered collection
+        mechanism and a set of methods. For example, if we have the list
+        [2,5,3,6,7,4], we need only to decide which end of the list will be
+        considered the top of the stack and which will be the base. Once that
+        decision is made, the operations can be implemented using the list
+        methods such as <code class="docutils literal"><span class="pre">append</span></code> and <code
+            class="docutils literal"><span class="pre">pop</span></code>.</p>
+    <p>The following stack implementation (<a class="reference internal" href="#lst-stackcode1"><span
+                class="std std-ref">ActiveCode 1</span></a>) assumes that
+        the end of the list will hold the top element of the stack. As the stack
+        grows (as <code class="docutils literal"><span class="pre">push</span></code> operations occur), new items will
+        be added on the end
+        of the list. <code class="docutils literal"><span class="pre">pop</span></code> operations will manipulate that
+        same end.</p>
+
+    <div data-childcomponent="stack_1ac" class="explainer ac_section alert alert-warning">
+
+        <textarea data-component="activecode" id=stack_1ac data-lang="python" data-timelimit=25000 data-audio=''
+            data-caption='Implementing a Stack class using Python lists'>
+        class Stack:
+             def __init__(self):
+                 self.items = []
+        
+             def isEmpty(self):
+                 return self.items == []
+        
+             def push(self, item):
+                 self.items.append(item)
+        
+             def pop(self):
+                 return self.items.pop()
+        
+             def peek(self):
+                 return self.items[len(self.items)-1]
+        
+             def size(self):
+                 return len(self.items)
+        </textarea>
+    </div>
+    <p>Remember that nothing happens when we click the <code class="docutils literal"><span
+                class="pre">run</span></code> button other than the
+        definition of the class. We must create a <code class="docutils literal"><span class="pre">Stack</span></code>
+        object and then use it.
+        <a class="reference internal" href="#lst-stackcode1"><span class="std std-ref">ActiveCode 2</span></a> shows the
+        <code class="docutils literal"><span class="pre">Stack</span></code> class in
+        action as we perform the sequence of operations from
+        <a class="reference internal" href="TheStackAbstractDataType.html#tbl-stackops"><span class="std std-ref">Table
+                1</span></a>. Notice that the definition of the <code class="docutils literal"><span
+                class="pre">Stack</span></code> class is
+        imported from the <code class="docutils literal"><span class="pre">pythonds</span></code> module.</p>
+    <div class="admonition note">
+        <p class="first admonition-title">Note</p>
+        <p class="last">The <code class="docutils literal"><span class="pre">pythonds</span></code> module contains
+            implementations of all data structures discussed in this book. It is structured according to the sections:
+            basic, trees, and graphs. The module can be downloaded from <a class="reference external"
+                href="http://www.pythonworks.org/pythonds">pythonworks.org</a>.</p>
+    </div>
+
+    <div data-childcomponent="stack_ex_1" class="explainer ac_section alert alert-warning">
+
+        <textarea data-component="activecode" id=stack_ex_1 data-lang="python" data-timelimit=25000 data-audio=''>
+        from pythonds.basic.stack import Stack
+        
+        s=Stack()
+        
+        print(s.isEmpty())
+        s.push(4)
+        s.push('dog')
+        print(s.peek())
+        s.push(True)
+        print(s.size())
+        print(s.isEmpty())
+        s.push(8.4)
+        print(s.pop())
+        print(s.pop())
+        print(s.size())
+        </textarea>
+    </div>
+    <p>It is important to note that we could have chosen to implement the stack
+        using a list where the top is at the beginning instead of at the end. In
+        this case, the previous <code class="docutils literal"><span class="pre">pop</span></code> and <code
+            class="docutils literal"><span class="pre">append</span></code> methods would no longer
+        work and we would have to index position 0 (the first item in the list)
+        explicitly using <code class="docutils literal"><span class="pre">pop</span></code> and <code
+            class="docutils literal"><span class="pre">insert</span></code>. The implementation is shown in
+        <a class="reference internal" href="#lst-stackcode2"><span class="std std-ref">CodeLens 1</span></a>.</p>
+
+    <div class="alert alert-warning cd_section">
+        <div id="stack_cl_1"></div>
+        <p class="cl_caption"><span class="cl_caption_text">Alternative Implementation of the Stack class
+                (stack_cl_1)</span> </p>
+    </div>
+    <script type="text/javascript">
+        var stack_cl_1_trace = {
+            "code": "class Stack:\n     def __init__(self):\n         self.items = []\n\n     def isEmpty(self):\n         return self.items == []\n\n     def push(self, item):\n         self.items.insert(0,item)\n\n     def pop(self):\n         return self.items.pop(0)\n\n     def peek(self):\n         return self.items[0]\n\n     def size(self):\n         return len(self.items)\n\ns = Stack()\ns.push('hello')\ns.push('true')\nprint(s.pop())",
+            "trace": [{
+                "ordered_globals": [],
+                "stdout": "",
+                "func_name": "<module>",
+                "stack_to_render": [],
+                "globals": {},
+                "heap": {},
+                "line": 1,
+                "event": "step_line"
+            }, {
+                "ordered_globals": ["Stack"],
+                "stdout": "",
+                "func_name": "<module>",
+                "stack_to_render": [],
+                "globals": {
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null]
+                },
+                "line": 20,
+                "event": "step_line"
+            }, {
+                "ordered_globals": ["Stack"],
+                "stdout": "",
+                "func_name": "__init__",
+                "stack_to_render": [{
+                    "frame_id": 1,
+                    "encoded_locals": {
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "__init__",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "__init___f1",
+                    "ordered_varnames": ["self"]
+                }],
+                "globals": {
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack"]
+                },
+                "line": 2,
+                "event": "call"
+            }, {
+                "ordered_globals": ["Stack"],
+                "stdout": "",
+                "func_name": "__init__",
+                "stack_to_render": [{
+                    "frame_id": 1,
+                    "encoded_locals": {
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "__init__",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "__init___f1",
+                    "ordered_varnames": ["self"]
+                }],
+                "globals": {
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack"]
+                },
+                "line": 3,
+                "event": "step_line"
+            }, {
+                "ordered_globals": ["Stack"],
+                "stdout": "",
+                "func_name": "__init__",
+                "stack_to_render": [{
+                    "frame_id": 1,
+                    "encoded_locals": {
+                        "__return__": null,
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "__init__",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "__init___f1",
+                    "ordered_varnames": ["self", "__return__"]
+                }],
+                "globals": {
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST"]
+                },
+                "line": 3,
+                "event": "return"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "<module>",
+                "stack_to_render": [],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST"]
+                },
+                "line": 21,
+                "event": "step_line"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "push",
+                "stack_to_render": [{
+                    "frame_id": 2,
+                    "encoded_locals": {
+                        "item": "hello",
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "push",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "push_f2",
+                    "ordered_varnames": ["self", "item"]
+                }],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST"]
+                },
+                "line": 8,
+                "event": "call"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "push",
+                "stack_to_render": [{
+                    "frame_id": 2,
+                    "encoded_locals": {
+                        "item": "hello",
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "push",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "push_f2",
+                    "ordered_varnames": ["self", "item"]
+                }],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST"]
+                },
+                "line": 9,
+                "event": "step_line"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "push",
+                "stack_to_render": [{
+                    "frame_id": 2,
+                    "encoded_locals": {
+                        "__return__": null,
+                        "item": "hello",
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "push",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "push_f2",
+                    "ordered_varnames": ["self", "item", "__return__"]
+                }],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "hello"]
+                },
+                "line": 9,
+                "event": "return"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "<module>",
+                "stack_to_render": [],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "hello"]
+                },
+                "line": 22,
+                "event": "step_line"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "push",
+                "stack_to_render": [{
+                    "frame_id": 3,
+                    "encoded_locals": {
+                        "item": "true",
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "push",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "push_f3",
+                    "ordered_varnames": ["self", "item"]
+                }],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "hello"]
+                },
+                "line": 8,
+                "event": "call"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "push",
+                "stack_to_render": [{
+                    "frame_id": 3,
+                    "encoded_locals": {
+                        "item": "true",
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "push",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "push_f3",
+                    "ordered_varnames": ["self", "item"]
+                }],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "hello"]
+                },
+                "line": 9,
+                "event": "step_line"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "push",
+                "stack_to_render": [{
+                    "frame_id": 3,
+                    "encoded_locals": {
+                        "__return__": null,
+                        "item": "true",
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "push",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "push_f3",
+                    "ordered_varnames": ["self", "item", "__return__"]
+                }],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "true", "hello"]
+                },
+                "line": 9,
+                "event": "return"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "<module>",
+                "stack_to_render": [],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "true", "hello"]
+                },
+                "line": 23,
+                "event": "step_line"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "pop",
+                "stack_to_render": [{
+                    "frame_id": 4,
+                    "encoded_locals": {
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "pop",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "pop_f4",
+                    "ordered_varnames": ["self"]
+                }],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "true", "hello"]
+                },
+                "line": 11,
+                "event": "call"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "pop",
+                "stack_to_render": [{
+                    "frame_id": 4,
+                    "encoded_locals": {
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "pop",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "pop_f4",
+                    "ordered_varnames": ["self"]
+                }],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "true", "hello"]
+                },
+                "line": 12,
+                "event": "step_line"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "",
+                "func_name": "pop",
+                "stack_to_render": [{
+                    "frame_id": 4,
+                    "encoded_locals": {
+                        "__return__": "true",
+                        "self": ["REF", 8]
+                    },
+                    "is_highlighted": true,
+                    "is_parent": false,
+                    "func_name": "pop",
+                    "is_zombie": false,
+                    "parent_frame_id_list": [],
+                    "unique_hash": "pop_f4",
+                    "ordered_varnames": ["self", "__return__"]
+                }],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "hello"]
+                },
+                "line": 12,
+                "event": "return"
+            }, {
+                "ordered_globals": ["Stack", "s"],
+                "stdout": "true\n",
+                "func_name": "<module>",
+                "stack_to_render": [],
+                "globals": {
+                    "s": ["REF", 8],
+                    "Stack": ["REF", 1]
+                },
+                "heap": {
+                    "1": ["CLASS", "Stack", [],
+                        ["__init__", ["REF", 2]],
+                        ["isEmpty", ["REF", 3]],
+                        ["peek", ["REF", 4]],
+                        ["pop", ["REF", 5]],
+                        ["push", ["REF", 6]],
+                        ["size", ["REF", 7]]
+                    ],
+                    "2": ["FUNCTION", "__init__(self)", null],
+                    "3": ["FUNCTION", "isEmpty(self)", null],
+                    "4": ["FUNCTION", "peek(self)", null],
+                    "5": ["FUNCTION", "pop(self)", null],
+                    "6": ["FUNCTION", "push(self, item)", null],
+                    "7": ["FUNCTION", "size(self)", null],
+                    "8": ["INSTANCE", "Stack", ["items", ["REF", 9]]],
+                    "9": ["LIST", "hello"]
+                },
+                "line": 23,
+                "event": "return"
+            }]
+        };
+        var stack_cl_1_vis;
+
+        $(document).ready(function () {
+            try {
+                stack_cl_1_vis = new ExecutionVisualizer('stack_cl_1', stack_cl_1_trace, {
+                    embeddedMode: true,
+                    verticalStack: false,
+                    heightChangeCallback: redrawAllVisualizerArrows,
+                    codeDivWidth: 500,
+                    lang: 'py2'
+                });
+                attachLoggers(stack_cl_1_vis, 'stack_cl_1');
+                styleButtons('stack_cl_1');
+                allVisualizers.push(stack_cl_1_vis);
+            } catch (e) {
+                console.log("Failed to Initialize CodeLens component stack_cl_1_vis");
+                console.log(e.toString());
+            }
+
+        });
+
+        $(document).ready(function () {
+            $("#stack_cl_1_tracecheck").click(function () {
+                logBookEvent({
+                    'event': 'codelens',
+                    'act': 'check',
+                    'div_id': 'stack_cl_1'
+                });
+            });
+        });
+
+        if (allVisualizers === undefined) {
+            var allVisualizers = [];
+        }
+
+
+        $(window).resize(function () {
+            if (stack_cl_1_vis) {
+                stack_cl_1_vis.redrawConnectors();
+            }
+        });
+    </script>
+    <p>This ability to change the physical implementation of an abstract data
+        type while maintaining the logical characteristics is an example of
+        abstraction at work. However, even though the stack will work either
+        way, if we consider the performance of the two implementations, there is
+        definitely a difference. Recall that the <code class="docutils literal"><span class="pre">append</span></code>
+        and <code class="docutils literal"><span class="pre">pop()</span></code>
+        operations were both O(1). This means that the first implementation will
+        perform push and pop in constant time no matter how many items are on
+        the stack. The performance of the second implementation suffers in that
+        the <code class="docutils literal"><span class="pre">insert(0)</span></code> and <code
+            class="docutils literal"><span class="pre">pop(0)</span></code> operations will both require O(n) for a
+        stack of size n. Clearly, even though the implementations are logically
+        equivalent, they would have very different timings when performing
+        benchmark testing.</p>
+    <div class="admonition-self-check admonition">
+        <p class="first admonition-title">Self Check</p>
+
+        <ul data-component="multiplechoice" data-multipleanswers="false" id="stack_1">
+            <p>Q-34: Given the following sequence of stack operations, what is the top item on the stack when the
+                sequence is complete?</p>
+            <div class="highlight-python">
+                <div class="highlight">
+                    <pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">()</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span>
+        </pre>
+                </div>
+            </div>
+
+            <li data-component="answer" id="stack_1_opt_a">(A) 'x'</li>
+            <li data-component="feedback" id="stack_1_opt_a">Remember that a stack is built from the bottom up.</li>
+
+            <li data-component="answer" id="stack_1_opt_b">(B) 'y'</li>
+            <li data-component="feedback" id="stack_1_opt_b">Remember that a stack is built from the bottom up.</li>
+
+            <li data-component="answer" data-correct id="stack_1_opt_c">(C) 'z'</li>
+            <li data-component="feedback" id="stack_1_opt_c">Good job.</li>
+
+            <li data-component="answer" id="stack_1_opt_d">(D) The stack is empty</li>
+            <li data-component="feedback" id="stack_1_opt_d">Remember that a stack is built from the bottom up.</li>
+
+
+        </ul>
+
+        <ul data-component="multiplechoice" data-multipleanswers="false" id="stack_2">
+            <p>Q-35: Given the following sequence of stack operations, what is the top item on the stack when the
+                sequence is complete?</p>
+            <div class="highlight-python">
+                <div class="highlight">
+                    <pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">()</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">():</span>
+           <span class="n">m</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+           <span class="n">m</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        </pre>
+                </div>
+            </div>
+
+            <li data-component="answer" id="stack_2_opt_a">(A) 'x'</li>
+            <li data-component="feedback" id="stack_2_opt_a">You may want to check out the docs for isEmpty</li>
+
+            <li data-component="answer" id="stack_2_opt_b">(B) the stack is empty</li>
+            <li data-component="feedback" id="stack_2_opt_b">There is an odd number of things on the stack but each time
+                through the loop 2 things are popped.</li>
+
+            <li data-component="answer" data-correct id="stack_2_opt_c">(C) an error will occur</li>
+            <li data-component="feedback" id="stack_2_opt_c">Good Job.</li>
+
+            <li data-component="answer" id="stack_2_opt_d">(D) 'z'</li>
+            <li data-component="feedback" id="stack_2_opt_d">You may want to check out the docs for isEmpty</li>
+
+
+        </ul>
+        <p>Write a function <cite>revstring(mystr)</cite> that uses a stack to reverse the
+            characters in a string.</p>
+
+        <div data-childcomponent="stack_stringrev" class="explainer ac_section alert alert-warning">
+
+            <textarea data-component="activecode" id=stack_stringrev data-lang="python" data-hidecode="true"
+                data-timelimit=25000 data-coach="true" data-audio='' data-gradebutton=true>
+        from test import testEqual
+        from pythonds.basic.stack import Stack
+        
+        def revstring(mystr):
+            # your code here
+        
+        testEqual(revstring('apple'),'elppa')
+        testEqual(revstring('x'),'x')
+        testEqual(revstring('1234567890'),'0987654321')
+        </textarea>
+        </div>
+    </div>
+    <div id="stack1_video" class="video_popup">
+        <video controls preload="none" poster="../_static/activecodethumb.png">
+            <source src="http://media.interactivepython.org/pythondsVideos/Stack1.mov" type="video/mp4">
+            </source>
+            <source src="http://media.interactivepython.org/pythondsVideos/Stack1.webm" type="video/webm">
+            </source>
+            No supported video types
+        </video>
+    </div>
+    <script>
+        jQuery(function ($) {
+            var rb = new RunestoneBase();
+            $('#stack1_video_thumb').click(function (e) {
+                $('#stack1_video').show();
+                $('#stack1_video_thumb').hide();
+                rb.logBookEvent({
+                    'event': 'video',
+                    'act': 'play',
+                    'div_id': 'stack1_video'
+                });
+                // Log the run event
+            });
+            $('#stack1_video video').one("click", function () {
+                this.play();
+            });
+            $('#stack1_video video').one("play", function () {
+                rb.logBookEvent({
+                    'event': 'video',
+                    'act': 'play',
+                    'div_id': 'stack1_video'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

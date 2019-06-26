@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <h1>3.8. Converting Decimal Numbers to Binary Numbers<a class="headerlink"
+            href="#converting-decimal-numbers-to-binary-numbers" title="Permalink to this headline">¶</a></h1>
+    <p>In your study of computer science, you have probably been
+        exposed in one way or another to the idea of a binary number. Binary
+        representation is important in computer science since all values stored
+        within a computer exist as a string of binary digits, a string of 0s and
+        1s. Without the ability to convert back and forth between common
+        representations and binary numbers, we would need to interact with
+        computers in very awkward ways.</p>
+    <p>Integer values are common data items. They are used in computer programs
+        and computation all the time. We learn about them in math class and of
+        course represent them using the decimal number system, or base 10. The
+        decimal number <span class="math">\(233_{10}\)</span> and its corresponding binary
+        equivalent <span class="math">\(11101001_{2}\)</span> are interpreted respectively as</p>
+    <p><span class="math">\(2\times10^{2} + 3\times10^{1} + 3\times10^{0}\)</span></p>
+    <p>and</p>
+    <p><span class="math">\(1\times2^{7} + 1\times2^{6} + 1\times2^{5} + 0\times2^{4} + 1\times2^{3} + 0\times2^{2} +
+            0\times2^{1} + 1\times2^{0}\)</span></p>
+    <p>But how can we easily convert integer values into binary numbers? The
+        answer is an algorithm called “Divide by 2” that uses a stack to keep
+        track of the digits for the binary result.</p>
+    <p>The Divide by 2 algorithm assumes that we start with an integer greater
+        than 0. A simple iteration then continually divides the decimal number
+        by 2 and keeps track of the remainder. The first division by 2 gives
+        information as to whether the value is even or odd. An even value will
+        have a remainder of 0. It will have the digit 0 in the ones place. An
+        odd value will have a remainder of 1 and will have the digit 1 in the
+        ones place. We think about building our binary number as a sequence of
+        digits; the first remainder we compute will actually be the last digit
+        in the sequence. As shown in <a class="reference internal" href="#fig-decbin"><span class="std std-ref">Figure
+                5</span></a>, we again see the
+        reversal property that signals that a stack is likely to be the
+        appropriate data structure for solving the problem.</p>
+    <div class="figure align-center" id="id1">
+        <span id="fig-decbin"></span><img alt="../_images/dectobin.png" src="../_images/dectobin.png" />
+        <p class="caption"><span class="caption-text">Figure 5: Decimal-to-Binary Conversion</span></p>
+    </div>
+    <p>The Python code in <a class="reference internal" href="#lst-binconverter"><span class="std std-ref">ActiveCode
+                1</span></a> implements the Divide by 2
+        algorithm. The function <code class="docutils literal"><span class="pre">divideBy2</span></code> takes an
+        argument that is a
+        decimal number and repeatedly divides it by 2. Line 7 uses the built-in
+        modulo operator, %, to extract the remainder and line 8 then pushes it
+        on the stack. After the division process reaches 0, a binary string is
+        constructed in lines 11-13. Line 11 creates an empty string. The binary
+        digits are popped from the stack one at a time and appended to the
+        right-hand end of the string. The binary string is then returned.</p>
+
+    <div data-childcomponent="divby2" class="explainer ac_section alert alert-warning">
+
+        <textarea data-component="activecode" id=divby2 data-lang="python" data-timelimit=25000 data-audio=''
+            data-caption='Converting from Decimal to Binary'>
+        from pythonds.basic.stack import Stack
+        
+        def divideBy2(decNumber):
+            remstack = Stack()
+        
+            while decNumber > 0:
+                rem = decNumber % 2
+                remstack.push(rem)
+                decNumber = decNumber // 2
+        
+            binString = ""
+            while not remstack.isEmpty():
+                binString = binString + str(remstack.pop())
+        
+            return binString
+        
+        print(divideBy2(42))
+        </textarea>
+    </div>
+    <p>The algorithm for binary conversion can easily be extended to perform
+        the conversion for any base. In computer science it is common to use a
+        number of different encodings. The most common of these are binary,
+        octal (base 8), and hexadecimal (base 16).</p>
+    <p>The decimal number <span class="math">\(233\)</span> and its corresponding octal and
+        hexadecimal equivalents <span class="math">\(351_{8}\)</span> and <span class="math">\(E9_{16}\)</span> are
+        interpreted as</p>
+    <p><span class="math">\(3\times8^{2} + 5\times8^{1} + 1\times8^{0}\)</span></p>
+    <p>and</p>
+    <p><span class="math">\(14\times16^{1} + 9\times16^{0}\)</span></p>
+    <p>The function <code class="docutils literal"><span class="pre">divideBy2</span></code> can be modified to accept
+        not only a decimal
+        value but also a base for the intended conversion. The “Divide by 2”
+        idea is simply replaced with a more general “Divide by base.” A new
+        function called <code class="docutils literal"><span class="pre">baseConverter</span></code>, shown in <a
+            class="reference internal" href="#lst-baseconverter"><span class="std std-ref">ActiveCode 2</span></a>,
+        takes a decimal number and any base between 2 and 16 as parameters. The
+        remainders are still pushed onto the stack until the value being
+        converted becomes 0. The same left-to-right string construction
+        technique can be used with one slight change. Base 2 through base 10
+        numbers need a maximum of 10 digits, so the typical digit characters 0,
+        1, 2, 3, 4, 5, 6, 7, 8, and 9 work fine. The problem comes when we go
+        beyond base 10. We can no longer simply use the remainders, as they are
+        themselves represented as two-digit decimal numbers. Instead we need to
+        create a set of digits that can be used to represent those remainders
+        beyond 9.</p>
+
+    <div data-childcomponent="baseconvert" class="explainer ac_section alert alert-warning">
+
+        <textarea data-component="activecode" id=baseconvert data-lang="python" data-timelimit=25000 data-audio=''
+            data-caption='Converting from Decimal to any Base'>
+        from pythonds.basic.stack import Stack
+        
+        def baseConverter(decNumber,base):
+            digits = "0123456789ABCDEF"
+        
+            remstack = Stack()
+        
+            while decNumber > 0:
+                rem = decNumber % base
+                remstack.push(rem)
+                decNumber = decNumber // base
+        
+            newString = ""
+            while not remstack.isEmpty():
+                newString = newString + digits[remstack.pop()]
+        
+            return newString
+        
+        print(baseConverter(25,2))
+        print(baseConverter(25,16))
+        </textarea>
+    </div>
+    <p>A solution to this problem is to extend the digit set to include some
+        alphabet characters. For example, hexadecimal uses the ten decimal
+        digits along with the first six alphabet characters for the 16 digits.
+        To implement this, a digit string is created (line 4 in
+        <a class="reference internal" href="#lst-baseconverter"><span class="std std-ref">Listing 6</span></a>) that
+        stores the digits in their corresponding
+        positions. 0 is at position 0, 1 is at position 1, A is at position 10,
+        B is at position 11, and so on. When a remainder is removed from the
+        stack, it can be used to index into the digit string and the correct
+        resulting digit can be appended to the answer. For example, if the
+        remainder 13 is removed from the stack, the digit D is appended to the
+        resulting string.</p>
+    <div class="admonition-self-check admonition">
+        <p class="first admonition-title">Self Check</p>
+
+        <p data-component="fillintheblank" data-casei="false" id="baseconvert1">
+
+            <span data-blank>
+                What is value of 25 expressed as an octal number
+                <span data-feedback="regex" style="display: none" id="bcblank1_feedback1">.*</span>
+                <span data-feedback="text" style="display: none" for="bcblank1_feedback1">Incorrect</span>
+
+                <span data-answer style="display: none" id="bcblank1_answer">\\b31\\b</span>
+            </span>
+
+        </p>
+
+        <p data-component="fillintheblank" data-casei="false" id="baseconvert2">
+
+            <span data-blank>
+                What is value of 256 expressed as a hexidecimal number
+                <span data-answer style="display: none" id="bcblank2_answer">\\b100\\b</span>
+            </span>
+
+        </p>
+
+        <p data-component="fillintheblank" data-casei="false" id="baseconvert3">
+
+            <span data-blank>
+                What is value of 26 expressed in base 26
+                <span data-feedback="regex" style="display: none" id="bcblank3_feedback1">.*</span>
+                <span data-feedback="text" style="display: none" for="bcblank3_feedback1">You may need to modify the
+                    baseConverter function, or simply find a pattern in the conversion of bases.</span>
+
+                <span data-answer style="display: none" id="bcblank3_answer">\\b10\\b</span>
+            </span>
+
+        </p>
+    </div>
+    <div id="video_Stack2" class="video_popup">
+        <video controls preload="none" poster="../_static/activecodethumb.png">
+            <source src="http://media.interactivepython.org/pythondsVideos/Stack2.mov" type="video/mp4">
+            </source>
+            <source src="http://media.interactivepython.org/pythondsVideos/Stack2.webm" type="video/webm">
+            </source>
+            No supported video types
+        </video>
+    </div>
+    <script>
+        jQuery(function ($) {
+            var rb = new RunestoneBase();
+            $('#video_Stack2_thumb').click(function (e) {
+                $('#video_Stack2').show();
+                $('#video_Stack2_thumb').hide();
+                rb.logBookEvent({
+                    'event': 'video',
+                    'act': 'play',
+                    'div_id': 'video_Stack2'
+                });
+                // Log the run event
+            });
+            $('#video_Stack2 video').one("click", function () {
+                this.play();
+            });
+            $('#video_Stack2 video').one("play", function () {
+                rb.logBookEvent({
+                    'event': 'video',
+                    'act': 'play',
+                    'div_id': 'video_Stack2'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

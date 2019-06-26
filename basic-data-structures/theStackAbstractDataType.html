@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <h1>3.4. The Stack Abstract Data Type</h1>
+    <p>The stack abstract data type is defined by the following structure and
+        operations. A stack is structured, as described above, as an ordered
+        collection of items where items are added to and removed from the end
+        called the “top.” Stacks are ordered LIFO. The stack operations are
+        given below.</p>
+    <ul class="simple">
+        <li><code class="docutils literal"><span class="pre">Stack()</span></code> creates a new stack that is empty. It
+            needs no parameters
+            and returns an empty stack.</li>
+        <li><code class="docutils literal"><span class="pre">push(item)</span></code> adds a new item to the top of the
+            stack. It needs the
+            item and returns nothing.</li>
+        <li><code class="docutils literal"><span class="pre">pop()</span></code> removes the top item from the stack. It
+            needs no parameters
+            and returns the item. The stack is modified.</li>
+        <li><code class="docutils literal"><span class="pre">peek()</span></code> returns the top item from the stack
+            but does not remove
+            it. It needs no parameters. The stack is not modified.</li>
+        <li><code class="docutils literal"><span class="pre">isEmpty()</span></code> tests to see whether the stack is
+            empty. It needs no
+            parameters and returns a boolean value.</li>
+        <li><code class="docutils literal"><span class="pre">size()</span></code> returns the number of items on the
+            stack. It needs no
+            parameters and returns an integer.</li>
+    </ul>
+    <p>For example, if <code class="docutils literal"><span class="pre">s</span></code> is a stack that has been created
+        and starts out
+        empty, then <a class="reference internal" href="#tbl-stackops"><span class="std std-ref">Table 1</span></a>
+        shows the results of a sequence of
+        stack operations. Under stack contents, the top item is listed at the
+        far right.</p>
+    <table border="1" class="docutils" id="id1">
+        <span id="tbl-stackops"></span>
+        <caption><span class="caption-text"><strong>Table 1: Sample Stack Operations</strong></span></caption>
+        <colgroup>
+            <col width="40%" />
+            <col width="34%" />
+            <col width="26%" />
+        </colgroup>
+        <thead valign="bottom">
+            <tr class="row-odd">
+                <th class="head"><strong>Stack Operation</strong></th>
+                <th class="head"><strong>Stack Contents</strong></th>
+                <th class="head"><strong>Return Value</strong></th>
+            </tr>
+        </thead>
+        <tbody valign="top">
+            <tr class="row-even">
+                <td><code class="docutils literal"><span class="pre">s.isEmpty()</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[]</span></code></td>
+                <td><code class="docutils literal"><span class="pre">True</span></code></td>
+            </tr>
+            <tr class="row-odd">
+                <td><code class="docutils literal"><span class="pre">s.push(4)</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4]</span></code></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="row-even">
+                <td><code class="docutils literal"><span class="pre">s.push('dog')</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4,'dog']</span></code></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="row-odd">
+                <td><code class="docutils literal"><span class="pre">s.peek()</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4,'dog']</span></code></td>
+                <td><code class="docutils literal"><span class="pre">'dog'</span></code></td>
+            </tr>
+            <tr class="row-even">
+                <td><code class="docutils literal"><span class="pre">s.push(True)</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4,'dog',True]</span></code></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="row-odd">
+                <td><code class="docutils literal"><span class="pre">s.size()</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4,'dog',True]</span></code></td>
+                <td><code class="docutils literal"><span class="pre">3</span></code></td>
+            </tr>
+            <tr class="row-even">
+                <td><code class="docutils literal"><span class="pre">s.isEmpty()</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4,'dog',True]</span></code></td>
+                <td><code class="docutils literal"><span class="pre">False</span></code></td>
+            </tr>
+            <tr class="row-odd">
+                <td><code class="docutils literal"><span class="pre">s.push(8.4)</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4,'dog',True,8.4]</span></code></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="row-even">
+                <td><code class="docutils literal"><span class="pre">s.pop()</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4,'dog',True]</span></code></td>
+                <td><code class="docutils literal"><span class="pre">8.4</span></code></td>
+            </tr>
+            <tr class="row-odd">
+                <td><code class="docutils literal"><span class="pre">s.pop()</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4,'dog']</span></code></td>
+                <td><code class="docutils literal"><span class="pre">True</span></code></td>
+            </tr>
+            <tr class="row-even">
+                <td><code class="docutils literal"><span class="pre">s.size()</span></code></td>
+                <td><code class="docutils literal"><span class="pre">[4,'dog']</span></code></td>
+                <td><code class="docutils literal"><span class="pre">2</span></code></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</body>
+
+</html>
